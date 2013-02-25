@@ -32,7 +32,7 @@ var doSomething = function(path, callback) {
 var ok = require('okay');
 get('/', function(req, res, next) {
   fs.readFile('file.txt', 'utf', ok(next, function(contents)) {
-    res.send contents;
+    res.send(contents);
   });
 });
 ```
