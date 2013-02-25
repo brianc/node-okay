@@ -48,6 +48,7 @@ describe('a directory', function() {
     }));
   });
 });
+```
 
 code golf, baby.
 
