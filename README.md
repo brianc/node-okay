@@ -20,7 +20,7 @@ var doSomething = function(path, callback) {
 var ok = require('okay');
 var doSomething = function(path, callback) {
   fs.readDir(ok(callback, function(files)){
-    async.forEach(files, fs.ReadFile, ok(callback, function(contents) {
+    async.map(files, fs.ReadFile, ok(callback, function(contents) {
       return callback(null, contents.join('\n'));
     }));
   });
