@@ -1,6 +1,6 @@
 # okay
 
-automatically return the error to the previous callback
+bubble errors back up your big ol' nested callback chain
 
 ## without okay
 ```js
@@ -36,6 +36,18 @@ get('/', function(req, res, next) {
   });
 });
 ```
+
+## mocha + okay
+```js
+var ok = require('okay');
+describe('a directory', function() {
+  it('exists', function(done) {
+    fs.readdir(__dirname, ok(done, function(files){
+      assert.equal(1, files.length);
+      done();
+    }));
+  });
+});
 
 code golf, baby.
 
