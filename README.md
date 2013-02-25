@@ -7,7 +7,7 @@ bubble errors back up your big ol' nested callback chain
 var doSomething = function(path, callback) {
   fs.readDir(function(err, files) {
     if(err) return callback(err);
-    async.forEach(files, fs.readFile, function(err, contents) {
+    async.map(files, fs.readFile, function(err, contents) {
       if(err) return callback(err);
       return callback(null, contents.join('\n'));
     });
