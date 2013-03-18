@@ -43,8 +43,8 @@ get('/', function(req, res, next) {
 ```coffee-script
 ok = require "okay"
 app.get "/", (req, res, next) ->
-fs.readFile "file.txt", "utf8", ok next, (contents) ->
-  res.send(contents)
+  fs.readFile "file.txt", "utf8", ok next, (contents) ->
+    res.send(contents)
 ```
 
 ## mocha + okay
