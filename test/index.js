@@ -30,4 +30,31 @@ describe('ok', function() {
     });
     cb(null, true, 2, "three");
   });
+
+  describe('with domains', function() {
+    var domain = require('domain').create();
+    assert.equal(process.domain, null);
+    bcrypt = require('bcrypt');
+    it('looses domain without okay', function(done) {
+      domain.run(function() {
+        assert.equal(process.domain, domain, "should be on active domain");
+        bcrypt.genSalt(1, function(err, salt) {
+          if(err) return err;
+          assert.equal(process.domain, null, "should have detached from domain");
+          done();
+        });
+      });
+    });
+
+    it('remains in domain with okay', function(done) {
+      domain.run(function() {
+        assert(process.domain, "should be in a domain");
+        bcrypt.genSalt(1, ok(done, function(salt) {
+          assert(process.domain, "after callback should still be in domain");
+          assert.equal(process.domain, domain, "should be in the SAME domain");
+          done();
+        }));
+      });
+    });
+  });
 });

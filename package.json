@@ -1,7 +1,7 @@
 {
   "name": "okay",
-  "version": "0.0.2",
-  "description": "error check nested callbacks",
+  "version": "0.1.0",
+  "description": "error check nested callbacks with domain support",
   "main": "index.js",
   "scripts": {
     "test": "./node_modules/.bin/mocha"
