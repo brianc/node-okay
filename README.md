@@ -1,6 +1,8 @@
 # okay
 
-bubble errors back up your big ol' nested callback chain
+Bubble errors back up your big ol' nested callback chain.
+
+If domains are in use, defer the error to the domain's error handler by using `process.domain.intercept` transparently.
 
 ## without okay
 ```js
@@ -31,10 +33,18 @@ var doSomething = function(path, callback) {
 ```js
 var ok = require('okay');
 get('/', function(req, res, next) {
-  fs.readFile('file.txt', 'utf', ok(next, function(contents)) {
+  fs.readFile('file.txt', 'utf8', ok(next, function(contents)) {
     res.send(contents);
   });
 });
+```
+
+## coffee-script + express + okay
+```coffee-script
+ok = require "okay"
+app.get "/", (req, res, next) ->
+fs.readFile "file.txt", "utf8", ok next, (contents) ->
+  res.send(contents)
 ```
 
 ## mocha + okay
