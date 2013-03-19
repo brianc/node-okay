@@ -31,6 +31,36 @@ describe('ok', function() {
     cb(null, true, 2, "three");
   });
 
+  describe('single parameter', function() {
+    describe('with error', function() {
+      it('throws error', function(done) {
+        assert(!process.domain, 'should not be in a domain');
+        var cb = function() {
+          assert.fail('should not get here');
+        };
+        var action = ok(cb);
+        try{
+          action(new Error('expected'));
+        } catch(e) {
+          assert.equal(e.message, 'expected');
+          done();
+        }
+      });
+    });
+    describe('with no error', function() {
+      assert(!process.domain, 'should not be in a domain');
+      it('calls callback', function(done) {
+        var cb = function(var1, var2) {
+          assert.equal(var1, 'test');
+          assert.equal(var2, 1);
+          done();
+        };
+        var action = ok(cb);
+        action(null, 'test', 1);
+      });
+    });
+  });
+
   describe('with domains', function() {
     var domain = require('domain').create();
     assert.equal(process.domain, null);
@@ -54,6 +84,40 @@ describe('ok', function() {
           assert.equal(process.domain, domain, "should be in the SAME domain");
           done();
         }));
+      });
+    });
+
+    describe('single callback', function() {
+      describe('with error', function(done) {
+        it('pushes error to domain', function(done) {
+          var domain = require('domain').create();
+          domain.on('error', function(e) {
+            assert.equal(e.message, 'expected');
+            done();
+          });
+          domain.run(function() {
+            var cb = function() {
+              assert.fail('should not have called callback');
+            };
+            var action = ok(cb);
+            action(new Error('expected'));
+          });
+        });
+      });
+      describe('without error', function() {
+        it('calls callback and does not raise domain error', function(done) {
+          var domain = require('domain').create();
+          domain.on('error', done);
+          domain.run(function() {
+            var cb = function(var1, var2) {
+              assert.equal(var1, 'test');
+              assert.equal(var2, 1);
+              done();
+            };
+            var action = ok(cb);
+            action(null, 'test', 1);
+          });
+        });
       });
     });
   });

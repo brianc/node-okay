@@ -1,6 +1,6 @@
 {
   "name": "okay",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "error check nested callbacks with domain support",
   "main": "index.js",
   "scripts": {
