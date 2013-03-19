@@ -21,15 +21,38 @@ var doSomething = function(path, callback) {
 ```js
 var ok = require('okay');
 var doSomething = function(path, callback) {
-  fs.readDir(ok(callback, function(files)){
+  //if path exists, bubble the error out to the 
+  //callback function right away
+  //if there was no error, call the new error-less callback
+  fs.readDir(path, ok(callback, function(files)){
+    
+    //if there was an error reading any file, bubble the error out to the
+    //callback function right away
+    //if there was no error, call the new error-less callback
     async.map(files, fs.ReadFile, ok(callback, function(contents) {
       return callback(null, contents.join('\n'));
     }));
   });
 };
+
+//okay also supports a single callback
+var doSomethingOrDie = function(path, callback) {
+  //if there is an error with fs.readDir, THROW it
+  //if there was no error, call the new error-less callback
+  fs.readDir(path, ok(function(files) {    
+    //if there was an error reading any file, THROW it
+    //if there was no error, call the new error-less callback
+    async.map(files, fs.ReadFile, ok(function(contents) {
+      return callback(null, contents.join('\n'));
+    }));
+  });
+};
+
 ```
 
 ## domains
+
+Throwing errors is _probably_ not what you want to do.
 
 `Okay` comes in __really handy__ if you are using [domains](http://nodejs.org/api/domain.html).  It transparently passes the error back into the active domain if it exists, or it calls your callback with the error parameter already removed in the happy circumstance where there is no error.  It's basically shorthand for `process.domain.intercept` but will fall back to throwing exceptions if domains are not activated or you're currently not bound to a domain.
 
