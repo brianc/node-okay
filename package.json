@@ -14,6 +14,7 @@
     "sliced": "0.0.5"
   },
   "devDependencies": {
-    "mocha": "*"
+    "mocha": "*",
+    "bcrypt": "~0.7.5"
   }
 }
