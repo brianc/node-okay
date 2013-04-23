@@ -87,6 +87,50 @@ describe('ok', function() {
       });
     });
 
+    describe('two callbacks', function() {
+      describe('with error', function() {
+        it('calls error callback on domain', function(done) {
+          var domain = require('domain').create();
+          domain.on('error', function(e) {
+            console.log(e);
+            done(new Error("Should not send error to domain error handler"));
+          });
+          var errorCb = function(err) {
+            assert.equal(process.domain, domain);
+            assert(err);
+            assert(err instanceof Error);
+            done();
+          };
+          var successCb = function() {
+            done(new Error("With error callback provided, success callback should not be called"));
+          }
+          domain.run(function() {
+            bcrypt.hash('1', '2', ok(errorCb, successCb));
+          });
+        });
+      });
+
+      describe('success', function() {
+        it('calls success callback', function(done) {
+          var domain = require('domain').create();
+          domain.on('error', function(e) {
+            done(new Error("Should not send error to domain error handler"));
+          });
+          var errorCb = function(err) {
+            done(new Error("Should not call error callback"));
+          };
+          var successCb = function(salt) {
+            assert(salt, 'should have called success callback with salt');
+            assert(typeof salt == 'string');
+            done();
+          }
+          domain.run(function() {
+            bcrypt.genSalt(1, ok(errorCb, successCb));
+          });
+        });
+      });
+    });
+
     describe('single callback', function() {
       describe('with error', function(done) {
         it('pushes error to domain', function(done) {
