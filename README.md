@@ -7,7 +7,7 @@ If domains are in use, defer the error to the domain's error handler by using `p
 ## without okay
 ```js
 var doSomething = function(path, callback) {
-  fs.readDir(function(err, files) {
+  fs.readDir(path, function(err, files) {
     if(err) return callback(err);
     async.map(files, fs.readFile, function(err, contents) {
       if(err) return callback(err);
