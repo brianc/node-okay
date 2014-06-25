@@ -21,15 +21,15 @@ var doSomething = function(path, callback) {
 ```js
 var ok = require('okay');
 var doSomething = function(path, callback) {
-  //if path exists, bubble the error out to the 
+  //if path does not exist, bubble the error out to the
   //callback function right away
   //if there was no error, call the new error-less callback
   fs.readDir(path, ok(callback, function(files)){
-    
+
     //if there was an error reading any file, bubble the error out to the
     //callback function right away
     //if there was no error, call the new error-less callback
-    async.map(files, fs.ReadFile, ok(callback, function(contents) {
+    async.map(files, fs.readFile, ok(callback, function(contents) {
       return callback(null, contents.join('\n'));
     }));
   });
@@ -39,7 +39,7 @@ var doSomething = function(path, callback) {
 var doSomethingOrDie = function(path, callback) {
   //if there is an error with fs.readDir, THROW it
   //if there was no error, call the new error-less callback
-  fs.readDir(path, ok(function(files) {    
+  fs.readDir(path, ok(function(files) {
     //if there was an error reading any file, THROW it
     //if there was no error, call the new error-less callback
     async.map(files, fs.ReadFile, ok(function(contents) {
@@ -111,7 +111,7 @@ serverDomain.run(function() {
 ```js
 var ok = require('okay');
 get('/', function(req, res, next) {
-  fs.readFile('file.txt', 'utf8', ok(next, function(contents)) {
+  fs.readFile('file.txt', 'utf8', ok(next, function(contents) {
     res.send(contents);
   });
 });
