@@ -6,15 +6,18 @@
   "scripts": {
     "test": "./node_modules/.bin/mocha"
   },
-  "repository": "",
-  "keywords": "domain domains",
-  "author": "",
+  "repository": "brianc/node-okay",
+  "keywords": [
+    "domain",
+    "domains"
+  ],
+  "author": "Brian C <brian.m.carlson@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "sliced": "0.0.5"
   },
   "devDependencies": {
-    "mocha": "*",
-    "bcrypt": "~0.7.5"
+    "bcrypt": "~0.7.5",
+    "mocha": "~2.0.1"
   }
 }
