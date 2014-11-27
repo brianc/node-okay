@@ -81,7 +81,7 @@ or even no callback at all:
 //if there is an error with fs.writeFile, THROW it
 //if there was no error, do nothing
 
-fs.writeFile(path, ok());
+fs.writeFile('/some/file', 'hello', ok());
 
 ```
 
