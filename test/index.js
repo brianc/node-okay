@@ -61,6 +61,18 @@ describe('ok', function() {
     });
   });
 
+  describe('no parameter', function() {
+    it('throws error', function(done) {
+      var action = ok();
+      try{
+        action(new Error('expected'));
+      } catch(e) {
+        assert.equal(e.message, 'expected');
+        done();
+      }
+    });
+  });
+
   describe('with domains', function() {
     var domain = require('domain').create();
     assert.equal(process.domain, null);
