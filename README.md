@@ -75,6 +75,17 @@ function doSomethingOrDie(path, callback) {
 
 ```
 
+or even no callback at all:
+
+```js
+//if there is an error with fs.writeFile, THROW it
+//if there was no error, do nothing
+
+fs.writeFile(path, ok());
+
+```
+
+
 ## domains
 
 Throwing errors is _probably_ not what you want to do.

@@ -29,6 +29,11 @@ function withoutDomains(parent, callback) {
   }
 }
 
+function zeroArgHandler(err) {
+  if(err) throw err;
+}
+
 module.exports = function(parent, callback) {
+  if (!parent) return zeroArgHandler;
   return process.domain ? withDomains(parent, callback) : withoutDomains(parent, callback);
 };
