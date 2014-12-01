@@ -1,5 +1,5 @@
 var sliced = require('sliced');
-var twoArgHandler = function(parent, callback) {
+function twoArgHandler(parent, callback) {
   return function(err) {
     if(err) {
       parent(err);
@@ -7,18 +7,18 @@ var twoArgHandler = function(parent, callback) {
       callback.apply(callback, sliced(arguments, 1));
     }
   }
-};
+}
 
 //bind callbacks with active domains
-var withDomains = function(parent, callback) {
+function withDomains(parent, callback) {
   if(callback) {
     return process.domain.bind(twoArgHandler(parent, callback));
   }
   return process.domain.intercept(parent);
-};
+}
 
 //bind callbacks without an active domain
-var withoutDomains = function(parent, callback) {
+function withoutDomains(parent, callback) {
   if(callback) {
     return twoArgHandler(parent, callback);
   }
@@ -27,8 +27,13 @@ var withoutDomains = function(parent, callback) {
     if(err) throw err;
     parent.apply(parent, sliced(arguments, 1));
   }
-};
+}
+
+function zeroArgHandler(err) {
+  if(err) throw err;
+}
 
 module.exports = function(parent, callback) {
+  if (!parent) return zeroArgHandler;
   return process.domain ? withDomains(parent, callback) : withoutDomains(parent, callback);
 };

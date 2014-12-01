@@ -6,12 +6,12 @@ If domains are in use, defer the error to the domain's error handler by using `p
 
 ## without okay
 ```js
-var doSomething = function(path, callback) {
+function doSomething(path, cb) {
   fs.readDir(path, function(err, files) {
-    if(err) return callback(err);
+    if(err) return cb(err);
     async.map(files, fs.readFile, function(err, contents) {
-      if(err) return callback(err);
-      return callback(null, contents.join('\n'));
+      if(err) return cb(err);
+      return cb(null, contents.join('\n'));
     });
   });
 };
@@ -20,28 +20,53 @@ var doSomething = function(path, callback) {
 ## with okay
 ```js
 var ok = require('okay');
-var doSomething = function(path, callback) {
-  //if path does not exist, bubble the error out to the
-  //callback function right away
-  //if there was no error, call the new error-less callback
-  fs.readDir(path, ok(callback, function(files)){
 
-    //if there was an error reading any file, bubble the error out to the
-    //callback function right away
-    //if there was no error, call the new error-less callback
-    async.map(files, fs.readFile, ok(callback, function(contents) {
-      return callback(null, contents.join('\n'));
+function doSomething(path, cb) {
+  fs.readDir(path, ok(cb, function(files)){
+    async.map(files, fs.readFile, ok(cb, function(contents) {
+      return cb(null, contents.join('\n'));
     }));
   });
 };
+```
 
-//okay also supports a single callback
-var doSomethingOrDie = function(path, callback) {
+The same code with annotations:
+
+```js
+var ok = require('okay');
+
+function doSomething(path, cb) {
+
+  //if path does not exist, bubble the error out to the
+  //callback function right away
+  //if there was no error, call the new error-less cb
+
+  fs.readDir(path, ok(cb, function(files)){
+
+    //if there was an error reading any file, bubble the error out to the
+    //callback function right away
+    //if there was no error, call the new error-less cb
+
+    async.map(files, fs.readFile, ok(cb, function(contents) {
+      return cb(null, contents.join('\n'));
+    }));
+  });
+};
+```
+
+okay also supports a single callback:
+
+```js
+function doSomethingOrDie(path, callback) {
+
   //if there is an error with fs.readDir, THROW it
   //if there was no error, call the new error-less callback
+
   fs.readDir(path, ok(function(files) {
+
     //if there was an error reading any file, THROW it
     //if there was no error, call the new error-less callback
+
     async.map(files, fs.ReadFile, ok(function(contents) {
       return callback(null, contents.join('\n'));
     }));
@@ -49,6 +74,17 @@ var doSomethingOrDie = function(path, callback) {
 };
 
 ```
+
+or even no callback at all:
+
+```js
+//if there is an error with fs.writeFile, THROW it
+//if there was no error, do nothing
+
+fs.writeFile('/some/file', 'hello', ok());
+
+```
+
 
 ## domains
 
