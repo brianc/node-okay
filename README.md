@@ -22,7 +22,7 @@ function doSomething(path, cb) {
 var ok = require('okay');
 
 function doSomething(path, cb) {
-  fs.readDir(path, ok(cb, function(files)){
+  fs.readDir(path, ok(cb, function(files){
     async.map(files, fs.readFile, ok(cb, function(contents) {
       return cb(null, contents.join('\n'));
     }));
@@ -41,7 +41,7 @@ function doSomething(path, cb) {
   //callback function right away
   //if there was no error, call the new error-less cb
 
-  fs.readDir(path, ok(cb, function(files)){
+  fs.readDir(path, ok(cb, function(files){
 
     //if there was an error reading any file, bubble the error out to the
     //callback function right away
